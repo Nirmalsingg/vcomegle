@@ -272,6 +272,17 @@
             try {
                 vcomegleApp = new VComingleApp();
                 console.log('✅ VComingle app initialized successfully');
+                
+                // Test button functionality
+                setTimeout(() => {
+                    console.log('🧪 Testing button functionality...');
+                    console.log('📱 startChat function:', typeof startChat);
+                    console.log('💰 openRevenueDashboard function:', typeof openRevenueDashboard);
+                    console.log('💸 withdrawFunds function:', typeof withdrawFunds);
+                    console.log('💳 showPremiumUpgrade function:', typeof showPremiumUpgrade);
+                    console.log('💳 paymentSystem object:', typeof paymentSystem);
+                    console.log('💰 revenueDashboard object:', typeof revenueDashboard);
+                }, 2000);
             } catch (error) {
                 console.error('❌ App initialization failed:', error);
             }
