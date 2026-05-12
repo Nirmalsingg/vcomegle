@@ -31,7 +31,10 @@ const waitingUsers = [];
 
 // Socket.io connection handling
 io.on('connection', (socket) => {
-    console.log('User connected:', socket.id);
+    console.log('✅ User connected:', socket.id);
+    console.log('📊 Current users online:', users.size);
+    console.log('⏳ Users waiting:', waitingUsers.length);
+    console.log('🏠 Active rooms:', rooms.size);
 
     // User looking for a match
     socket.on('find-match', (data) => {
@@ -71,12 +74,14 @@ io.on('connection', (socket) => {
             // Second user (match) becomes the receiver
             match.socket.emit('match-found', { roomId, strangerId: user.id, isInitiator: false });
             
-            console.log(`Matched users ${user.id} (initiator) and ${match.id} (receiver) in room ${roomId}`);
+            console.log(`🎯 Matched users ${user.id} (initiator) and ${match.id} (receiver) in room ${roomId}`);
+            console.log(`📝 Room ${roomId} created with 2 users`);
+            console.log(`⏰ Match time: ${new Date().toISOString()}`);
         } else {
             // Add to waiting list
             waitingUsers.push(user);
             socket.emit('waiting');
-            console.log(`User ${socket.id} added to waiting list`);
+            console.log(`⏳ User ${socket.id} added to waiting list (Total: ${waitingUsers.length})`);
         }
     });
 
@@ -88,13 +93,13 @@ io.on('connection', (socket) => {
         if (room) {
             const otherUser = room.users.find(u => u.id !== socket.id);
             if (otherUser) {
-                console.log(`Forwarding offer from ${socket.id} to ${otherUser.id}`);
+                console.log(`📤 Forwarding offer from ${socket.id} to ${otherUser.id}`);
                 otherUser.socket.emit('offer', { offer, from: socket.id });
             } else {
-                console.log('No other user found in room for offer');
+                console.log(`❌ No other user found in room ${roomId} for offer from ${socket.id}`);
             }
         } else {
-            console.log('Room not found for offer:', roomId);
+            console.log(`❌ Room ${roomId} not found for offer from ${socket.id}`);
         }
     });
 
@@ -122,13 +127,13 @@ io.on('connection', (socket) => {
         if (room) {
             const otherUser = room.users.find(u => u.id !== socket.id);
             if (otherUser) {
-                console.log(`Forwarding ICE candidate from ${socket.id} to ${otherUser.id}`);
+                console.log(`🧊 Forwarding ICE candidate from ${socket.id} to ${otherUser.id}`);
                 otherUser.socket.emit('ice-candidate', { candidate, from: socket.id });
             } else {
-                console.log('No other user found in room for ICE candidate');
+                console.log(`❌ No other user found in room ${roomId} for ICE candidate from ${socket.id}`);
             }
         } else {
-            console.log('Room not found for ICE candidate:', roomId);
+            console.log(`❌ Room ${roomId} not found for ICE candidate from ${socket.id}`);
         }
     });
 
@@ -223,28 +228,30 @@ io.on('connection', (socket) => {
 
 // Helper functions
 function findMatch(user) {
-    // Find a user with similar preferences
-    for (let i = 0; i < waitingUsers.length; i++) {
-        const candidate = waitingUsers[i];
+    // Enhanced matching algorithm
+    const availableUsers = waitingUsers.filter(waitingUser => {
+        // Match text preference
+        if (waitingUser.textOnly !== user.textOnly) return false;
         
-        // Check if both users want the same mode (text/video)
-        if (candidate.textOnly === user.textOnly) {
-            // Check for shared interests (if any)
-            if (user.interests.length > 0 && candidate.interests.length > 0) {
-                const sharedInterests = user.interests.filter(interest => 
-                    candidate.interests.includes(interest)
-                );
-                
-                // Prioritize users with shared interests
-                if (sharedInterests.length > 0) {
-                    return candidate;
-                }
-            } else {
-                // No interests specified, match anyway
-                return candidate;
+        // Don't match with self
+        if (waitingUser.id === user.id) return false;
+        
+        // Interest matching (if specified)
+        if (user.interests.length > 0 && waitingUser.interests.length > 0) {
+            const commonInterests = user.interests.some(interest => 
+                waitingUser.interests.includes(interest)
+            );
+            if (!commonInterests) return false;
+            
+            // Prioritize users with shared interests
+            if (commonInterests) {
+                return waitingUser;
             }
+        } else {
+            // No interests specified, match anyway
+            return waitingUser;
         }
-    }
+    });
     
     // No specific match found, return first available user with same mode preference
     return waitingUsers.find(candidate => candidate.textOnly === user.textOnly);
