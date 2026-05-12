@@ -120,7 +120,7 @@ class VComingleApp {
         return new Promise((resolve, reject) => {
             try {
                 // Use the current domain for Socket.io connection
-                const socketUrl = window.location.origin;
+                const socketUrl = "https://vcomegle-backend.onrender.com";
                 this.socket = io(socketUrl);
                 
                 this.socket.on('connect', () => {
