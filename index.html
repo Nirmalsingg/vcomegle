@@ -18,14 +18,14 @@
                     <h1>VComingle</h1>
                     <span class="tagline">Talk to strangers</span>
                 </div>
-                <button id="premiumBtn" class="premium-btn">Upgrade to Premium</button>
-                <button id="revenueBtn" class="revenue-btn" onclick="revenueDashboard.initializeDashboard()">💰 Revenue</button>
+                <div class="header-buttons">
+                    <button id="premiumBtn" class="premium-btn" onclick="showPremiumUpgrade()">Upgrade to Premium</button>
+                    <button id="revenueBtn" class="revenue-btn" onclick="revenueDashboard.initializeDashboard()">💰 Revenue</button>
+                    <button id="withdrawBtn" class="withdraw-btn" onclick="revenueDashboard.withdrawFunds()">💸 Withdraw</button>
+                </div>
             </div>
             <div class="user-info">
                 <span class="online-count">Online: <span id="onlineCount">0</span></span>
-                <button class="premium-upgrade-btn" id="premiumBtn" onclick="showPremiumUpgrade()">
-                    Upgrade to Premium
-                </button>
             </div>
         </header>
 
@@ -48,7 +48,7 @@
                         </div>
                     </div>
 
-                    <button id="startChat" class="btn btn-primary">Start Chatting</button>
+                    <button id="startChat" class="btn btn-primary" onclick="startChat()">Start Chatting</button>
                     
                     <div class="rules">
                         <h3>Rules:</h3>
@@ -184,6 +184,36 @@
     <script src="revenue-dashboard.js"></script>
     <script src="premium-functions.js"></script>
     <script src="app.js"></script>
+    
+    <script>
+        // Initialize global functions for button clicks
+        let vcomegleApp;
+        
+        function startChat() {
+            if (!vcomegleApp) {
+                vcomegleApp = new VComingleApp();
+            }
+            vcomegleApp.connectToSignalingServer().then(() => {
+                const textOnly = document.getElementById('textOnly').checked;
+                const interests = document.getElementById('interests').value;
+                vcomegleApp.findMatch(textOnly, interests);
+            });
+        }
+        
+        function showPremiumUpgrade() {
+            if (!vcomegleApp) {
+                vcomegleApp = new VComingleApp();
+            }
+            // Show premium payment modal
+            vcomegleApp.showPremiumUpgrade();
+        }
+        
+        // Initialize app when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            vcomegleApp = new VComingleApp();
+            console.log('🚀 VComingle app initialized');
+        });
+    </script>
     <script type="module">
     import { inject } from 'https://unpkg.com/@vercel/analytics/dist/index.mjs';
     inject();
