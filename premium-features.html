@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VComingle Premium - Upgrade Your Experience</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .pricing-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        .pricing-card.featured {
+            border: 3px solid #667eea;
+            transform: scale(1.05);
+        }
+        .pricing-card.featured:hover {
+            transform: scale(1.08) translateY(-5px);
+        }
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        .plan-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        .plan-price span {
+            font-size: 1rem;
+            color: #666;
+        }
+        .plan-description {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+        .features-list {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        .features-list li {
+            padding: 0.5rem 0;
+            color: #555;
+            display: flex;
+            align-items: center;
+        }
+        .features-list li:before {
+            content: "✓";
+            color: #4CAF50;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        .features-list li.disabled:before {
+            content: "✗";
+            color: #f44336;
+        }
+        .features-list li.disabled {
+            color: #999;
+            text-decoration: line-through;
+        }
+        .btn-premium {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-premium.primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        .btn-premium.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        .btn-premium.secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        .btn-premium.secondary:hover {
+            background: #e0e0e0;
+        }
+        .popular-badge {
+            background: #ff4757;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .revenue-stats {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .revenue-stats h2 {
+            color: #333;
+            margin-bottom: 2rem;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        .stat-item {
+            padding: 1rem;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        .stat-label {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>VComingle Premium</h1>
+            <p>Unlock amazing features and enhance your video chat experience</p>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- Free Plan -->
+            <div class="pricing-card">
+                <div class="plan-name">Free</div>
+                <div class="plan-price">$0<span>/month</span></div>
+                <div class="plan-description">Perfect for getting started</div>
+                <ul class="features-list">
+                    <li>Basic video chat</li>
+                    <li>Text messaging</li>
+                    <li>Random matching</li>
+                    <li>Standard quality video</li>
+                    <li class="disabled">No ads removal</li>
+                    <li class="disabled">No gender filters</li>
+                    <li class="disabled">No location filters</li>
+                    <li class="disabled">No priority matching</li>
+                    <li class="disabled">No virtual gifts</li>
+                    <li class="disabled">No profile customization</li>
+                </ul>
+                <button class="btn-premium secondary">Current Plan</button>
+            </div>
+
+            <!-- Premium Plan -->
+            <div class="pricing-card featured">
+                <div class="popular-badge">MOST POPULAR</div>
+                <div class="plan-name">Premium</div>
+                <div class="plan-price">$9.99<span>/month</span></div>
+                <div class="plan-description">Best value for regular users</div>
+                <ul class="features-list">
+                    <li>Everything in Free</li>
+                    <li>Ad-free experience</li>
+                    <li>HD video quality</li>
+                    <li>Gender preference filters</li>
+                    <li>Location-based matching</li>
+                    <li>Priority in matching queue</li>
+                    <li>Virtual gifts & stickers</li>
+                    <li>Custom profile themes</li>
+                    <li class="disabled">No advanced analytics</li>
+                    <li class="disabled">No unlimited everything</li>
+                </ul>
+                <button class="btn-premium primary">Upgrade to Premium</button>
+            </div>
+
+            <!-- VIP Plan -->
+            <div class="pricing-card">
+                <div class="plan-name">VIP</div>
+                <div class="plan-price">$19.99<span>/month</span></div>
+                <div class="plan-description">Ultimate experience</div>
+                <ul class="features-list">
+                    <li>Everything in Premium</li>
+                    <li>4K video quality</li>
+                    <li>Unlimited virtual gifts</li>
+                    <li>Advanced matching algorithms</li>
+                    <li>Profile verification badge</li>
+                    <li>Exclusive VIP rooms</li>
+                    <li>Advanced analytics dashboard</li>
+                    <li>Priority customer support</li>
+                    <li>Early access to new features</li>
+                    <li>Unlimited everything</li>
+                </ul>
+                <button class="btn-premium primary">Go VIP</button>
+            </div>
+        </div>
+
+        <div class="revenue-stats">
+            <h2>💰 Revenue Potential</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">$9,990</div>
+                    <div class="stat-label">Monthly @ 1000 Premium Users</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">$119,880</div>
+                    <div class="stat-label">Yearly @ 1000 Premium Users</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">$49,950</div>
+                    <div class="stat-label">Monthly @ 2500 Premium Users</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">$599,400</div>
+                    <div class="stat-label">Yearly @ 2500 Premium Users</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

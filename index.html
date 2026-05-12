@@ -6,6 +6,7 @@
     <title>VComingle - Random Video Chat</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="monetization.css">
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
@@ -18,6 +19,9 @@
             </div>
             <div class="user-info">
                 <span class="online-count">Online: <span id="onlineCount">0</span></span>
+                <button class="premium-upgrade-btn" id="premiumBtn" onclick="showPremiumUpgrade()">
+                    Upgrade to Premium
+                </button>
             </div>
         </header>
 
@@ -110,12 +114,69 @@
             </div>
         </main>
 
+        <!-- Virtual Gifts Panel -->
+        <div class="virtual-gifts-panel" id="virtualGiftsPanel">
+            <h4>Send Virtual Gifts</h4>
+            <div class="gift-item" onclick="sendGift('heart')">
+                <div class="gift-icon">❤️</div>
+                <div class="gift-cost">10 coins</div>
+            </div>
+            <div class="gift-item" onclick="sendGift('rose')">
+                <div class="gift-icon">🌹</div>
+                <div class="gift-cost">25 coins</div>
+            </div>
+            <div class="gift-item" onclick="sendGift('star')">
+                <div class="gift-icon">⭐</div>
+                <div class="gift-cost">50 coins</div>
+            </div>
+            <div class="gift-item" onclick="sendGift('diamond')">
+                <div class="gift-icon">💎</div>
+                <div class="gift-cost">100 coins</div>
+            </div>
+            <div class="gift-item" onclick="sendGift('crown')">
+                <div class="gift-icon">👑</div>
+                <div class="gift-cost">200 coins</div>
+            </div>
+        </div>
+
+        <!-- Revenue Dashboard -->
+        <div class="revenue-dashboard" id="revenueDashboard">
+            <div class="dashboard-header">
+                <h3>Revenue Dashboard</h3>
+                <button class="dashboard-close" onclick="toggleRevenueDashboard()">×</button>
+            </div>
+            <div class="dashboard-content">
+                <div class="stat-card">
+                    <h4>Total Revenue</h4>
+                    <div class="stat-value" id="totalRevenue">$0</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Premium Users</h4>
+                    <div class="stat-value" id="premiumUsers">0</div>
+                </div>
+                <div class="stat-card">
+                    <h4>VIP Users</h4>
+                    <div class="stat-value" id="vipUsers">0</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Virtual Gifts Revenue</h4>
+                    <div class="stat-value" id="giftsRevenue">$0</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Total Active Users</h4>
+                    <div class="stat-value" id="totalUsers">0</div>
+                </div>
+            </div>
+        </div>
+
         <!-- Footer -->
         <footer class="footer">
             <p>&copy; 2024 VComingle. Use responsibly.</p>
         </footer>
     </div>
 
+    <script src="monetization.js"></script>
+    <script src="premium-functions.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

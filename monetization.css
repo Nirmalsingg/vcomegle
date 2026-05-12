@@ -1,0 +1,347 @@
+/* Monetization Styles */
+
+/* Premium Upgrade Button */
+.premium-upgrade-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #ff4757, #ff6348);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+    transition: all 0.3s;
+}
+
+.premium-upgrade-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
+}
+
+.premium-upgrade-btn.premium {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.premium-upgrade-btn.vip {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #333;
+}
+
+/* Virtual Gifts Panel */
+.virtual-gifts-panel {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    z-index: 999;
+    display: none;
+}
+
+.virtual-gifts-panel.show {
+    display: block;
+}
+
+.gift-item {
+    display: inline-block;
+    margin: 5px;
+    padding: 10px;
+    border: 2px solid #f0f0f0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+}
+
+.gift-item:hover {
+    border-color: #667eea;
+    transform: translateY(-2px);
+}
+
+.gift-icon {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.gift-cost {
+    font-size: 12px;
+    color: #666;
+}
+
+/* Ad Overlay */
+.ad-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.ad-content {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+}
+
+.ad-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+}
+
+.ad-close:hover {
+    color: #333;
+}
+
+.ad-body h3 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.ad-body p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.ad-body button {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* Upgrade Success Message */
+.upgrade-success-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    z-index: 3000;
+    text-align: center;
+}
+
+.upgrade-content h3 {
+    color: #4CAF50;
+    margin-bottom: 15px;
+}
+
+.upgrade-content p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.upgrade-content button {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* Gift Animation */
+.gift-animation {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1500;
+    pointer-events: none;
+}
+
+.gift-content {
+    background: rgba(255,255,255,0.95);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    animation: giftPopup 3s ease-in-out;
+}
+
+.gift-icon {
+    font-size: 48px;
+    margin-bottom: 10px;
+    animation: giftBounce 1s ease-in-out infinite;
+}
+
+.gift-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+@keyframes giftPopup {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); opacity: 0; }
+}
+
+@keyframes giftBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Premium Features Badge */
+.premium-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    margin-left: 5px;
+}
+
+.vip-badge {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #333;
+}
+
+/* Filter Options for Premium Users */
+.filter-options {
+    background: rgba(255,255,255,0.9);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 20px;
+    display: none;
+}
+
+.filter-options.show {
+    display: block;
+}
+
+.filter-group {
+    margin-bottom: 15px;
+}
+
+.filter-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #555;
+}
+
+.filter-group select {
+    width: 100%;
+    padding: 8px;
+    border: 2px solid #e1e1e1;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* Revenue Dashboard */
+.revenue-dashboard {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100vh;
+    background: white;
+    box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+    transition: right 0.3s;
+    z-index: 1001;
+    overflow-y: auto;
+}
+
+.revenue-dashboard.show {
+    right: 0;
+}
+
+.dashboard-header {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 20px;
+    position: relative;
+}
+
+.dashboard-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.dashboard-content {
+    padding: 20px;
+}
+
+.stat-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.stat-card h4 {
+    color: #666;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.stat-card .stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .premium-upgrade-btn {
+        top: 10px;
+        right: 10px;
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+    
+    .virtual-gifts-panel {
+        bottom: 10px;
+        right: 10px;
+        left: 10px;
+    }
+    
+    .gift-item {
+        margin: 3px;
+        padding: 8px;
+    }
+    
+    .revenue-dashboard {
+        width: 100%;
+        right: -100%;
+    }
+    
+    .ad-content {
+        margin: 20px;
+        max-width: none;
+    }
+}
