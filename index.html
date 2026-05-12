@@ -13,9 +13,13 @@
     <div class="app-container">
         <!-- Header -->
         <header class="header">
-            <div class="logo">
-                <h1>VComingle</h1>
-                <span class="tagline">Talk to strangers</span>
+            <div class="header">
+                <div class="logo">
+                    <h1>VComingle</h1>
+                    <span class="tagline">Talk to strangers</span>
+                </div>
+                <button id="premiumBtn" class="premium-btn">Upgrade to Premium</button>
+                <button id="revenueBtn" class="revenue-btn" onclick="revenueDashboard.initializeDashboard()">💰 Revenue</button>
             </div>
             <div class="user-info">
                 <span class="online-count">Online: <span id="onlineCount">0</span></span>
@@ -177,6 +181,7 @@
 
     <script src="monetization.js"></script>
     <script src="payment-system.js"></script>
+    <script src="revenue-dashboard.js"></script>
     <script src="premium-functions.js"></script>
     <script src="app.js"></script>
     <script type="module">
