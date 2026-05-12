@@ -37,11 +37,19 @@ class VCominglePaymentSystem {
                     <button class="close-btn" onclick="this.closest('.payment-modal').remove()">×</button>
                 </div>
                 
+                <div class="benefits-showcase">
+                    <h4>🌟 What You'll Get:</h4>
+                    <div class="benefits-grid">
+                        ${this.getBenefitsHTML(tier)}
+                    </div>
+                </div>
+                
                 <div class="payment-info">
                     <div class="plan-details">
                         <h4>${tier === 'premium' ? 'Premium Plan' : 'VIP Plan'}</h4>
                         <div class="price">₹${this.convertToINR(amount)}/month</div>
                         <div class="original-price">$${amount}/month</div>
+                        <div class="savings">Save ₹${this.calculateSavings(tier, amount)}/year</div>
                     </div>
                 </div>
 
@@ -108,6 +116,117 @@ class VCominglePaymentSystem {
     // Convert USD to INR (approximate rate)
     convertToINR(usdAmount) {
         return Math.round(usdAmount * 83); // 1 USD ≈ 83 INR
+    }
+
+    // Get benefits HTML for tier
+    getBenefitsHTML(tier) {
+        if (tier === 'premium') {
+            return `
+                <div class="benefit-card">
+                    <div class="benefit-icon">🚫</div>
+                    <div class="benefit-text">
+                        <strong>No Ads</strong>
+                        <span>Enjoy ad-free experience</span>
+                    </div>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎥</div>
+                    <div class="benefit-text">
+                        <strong>HD Video</strong>
+                        <span>1080p quality streaming</span>
+                    </div>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">👥</div>
+                    <div class="benefit-text">
+                        <strong>Gender Filters</strong>
+                        <span>Choose who to connect with</span>
+                    </div>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🌍</div>
+                    <div class="benefit-text">
+                        <strong>Location Filters</strong>
+                        <span>Connect by region</span>
+                    </div>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">⚡</div>
+                    <div class="benefit-text">
+                        <strong>Priority Matching</strong>
+                        <span>Skip the queue</span>
+                    </div>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎁</div>
+                    <div class="benefit-text">
+                        <strong>Virtual Gifts</strong>
+                        <span>Send gifts to strangers</span>
+                    </div>
+                </div>
+            `;
+        } else if (tier === 'vip') {
+            return `
+                <div class="benefit-card">
+                    <div class="benefit-icon">🚫</div>
+                    <div class="benefit-text">
+                        <strong>No Ads</strong>
+                        <span>Completely ad-free</span>
+                    </div>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎬</div>
+                    <div class="benefit-text">
+                        <strong>4K Video</strong>
+                        <span>Ultra HD quality</span>
+                    </div>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎁</div>
+                    <div class="benefit-text">
+                        <strong>Unlimited Gifts</strong>
+                        <span>Send unlimited virtual gifts</span>
+                    </div>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">👑</div>
+                    <div class="benefit-text">
+                        <strong>Verified Badge</strong>
+                        <span>Show your VIP status</span>
+                    </div>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">📊</div>
+                    <div class="benefit-text">
+                        <strong>Analytics</strong>
+                        <span>Track your connections</span>
+                    </div>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🏆</div>
+                    <div class="benefit-text">
+                        <strong>VIP Rooms</strong>
+                        <span>Exclusive chat rooms</span>
+                    </div>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎯</div>
+                    <div class="benefit-text">
+                        <strong>Priority Support</strong>
+                        <span>24/7 customer service</span>
+                    </div>
+                </div>
+            `;
+        }
+        return '';
+    }
+
+    // Calculate yearly savings
+    calculateSavings(tier, amount) {
+        const monthlyAmount = this.convertToINR(amount);
+        const yearlyAmount = monthlyAmount * 12;
+        const discountedYearly = Math.round(yearlyAmount * 0.8); // 20% discount for yearly
+        return yearlyAmount - discountedYearly;
     }
 
     // Initiate UPI Payment
@@ -722,6 +841,70 @@ class VCominglePaymentSystem {
                 color: #667eea;
             }
             
+            .benefits-showcase {
+                background: linear-gradient(135deg, #f8f9ff, #e8f4fd);
+                border-radius: 12px;
+                padding: 20px;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+            
+            .benefits-showcase h4 {
+                color: #333;
+                margin-bottom: 15px;
+                font-size: 18px;
+            }
+            
+            .benefits-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .benefit-card {
+                background: white;
+                border-radius: 8px;
+                padding: 15px;
+                text-align: center;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                transition: transform 0.3s, box-shadow 0.3s;
+            }
+            
+            .benefit-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            }
+            
+            .benefit-icon {
+                font-size: 32px;
+                margin-bottom: 10px;
+                display: block;
+            }
+            
+            .benefit-text strong {
+                display: block;
+                color: #333;
+                margin-bottom: 5px;
+                font-size: 14px;
+            }
+            
+            .benefit-text span {
+                color: #666;
+                font-size: 12px;
+            }
+            
+            .savings {
+                background: #4CAF50;
+                color: white;
+                padding: 8px 12px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: 600;
+                margin-top: 10px;
+                display: inline-block;
+            }
+
             .payment-security {
                 text-align: center;
                 margin-top: 20px;
