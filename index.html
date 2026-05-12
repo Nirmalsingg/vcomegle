@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VComingle - Random Video Chat</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <h1>VComingle</h1>
+                <span class="tagline">Talk to strangers</span>
+            </div>
+            <div class="user-info">
+                <span class="online-count">Online: <span id="onlineCount">0</span></span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Screen -->
+            <div id="welcomeScreen" class="screen welcome-screen">
+                <div class="welcome-content">
+                    <h2>Welcome to VComingle</h2>
+                    <p>Connect with random people around the world through video chat</p>
+                    
+                    <div class="preferences">
+                        <div class="preference-group">
+                            <label for="textOnly">Text Only Mode</label>
+                            <input type="checkbox" id="textOnly">
+                        </div>
+                        <div class="preference-group">
+                            <label for="interests">Add your interests (optional)</label>
+                            <input type="text" id="interests" placeholder="music, gaming, movies...">
+                        </div>
+                    </div>
+
+                    <button id="startChat" class="btn btn-primary">Start Chatting</button>
+                    
+                    <div class="rules">
+                        <h3>Rules:</h3>
+                        <ul>
+                            <li>Be respectful to others</li>
+                            <li>No inappropriate content</li>
+                            <li>You must be 18+ to use this service</li>
+                            <li>Keep your camera on if video chatting</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Screen -->
+            <div id="chatScreen" class="screen chat-screen hidden">
+                <div class="video-container">
+                    <div class="video-wrapper">
+                        <video id="localVideo" autoplay muted playsinline class="video-local"></video>
+                        <div class="video-label">You</div>
+                    </div>
+                    <div class="video-wrapper">
+                        <video id="remoteVideo" autoplay playsinline class="video-remote"></video>
+                        <div class="video-label">Stranger</div>
+                    </div>
+                </div>
+
+                <!-- Chat Messages -->
+                <div id="chatMessages" class="chat-messages">
+                    <div class="message system">
+                        <span class="message-text">Connected to a stranger. Say hello!</span>
+                    </div>
+                </div>
+
+                <!-- Message Input -->
+                <div class="message-input-container">
+                    <input type="text" id="messageInput" placeholder="Type a message..." maxlength="200">
+                    <button id="sendMessage" class="btn btn-send">Send</button>
+                </div>
+
+                <!-- Controls -->
+                <div class="controls">
+                    <button id="nextButton" class="btn btn-secondary">Next</button>
+                    <button id="stopButton" class="btn btn-danger">Stop</button>
+                    <button id="reportButton" class="btn btn-warning">Report</button>
+                    <button id="toggleVideo" class="btn btn-control">📹</button>
+                    <button id="toggleAudio" class="btn btn-control">🎤</button>
+                </div>
+            </div>
+
+            <!-- Connecting Screen -->
+            <div id="connectingScreen" class="screen connecting-screen hidden">
+                <div class="connecting-content">
+                    <div class="spinner"></div>
+                    <h2>Finding someone to chat with...</h2>
+                    <p>This may take a few moments</p>
+                </div>
+            </div>
+
+            <!-- Disconnected Screen -->
+            <div id="disconnectedScreen" class="screen disconnected-screen hidden">
+                <div class="disconnected-content">
+                    <h2>Stranger has disconnected</h2>
+                    <p>Would you like to find someone new?</p>
+                    <button id="findNew" class="btn btn-primary">Find New Stranger</button>
+                    <button id="goHome" class="btn btn-secondary">Go Home</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 VComingle. Use responsibly.</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
