@@ -237,6 +237,42 @@ body {
     box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
 }
 
+.connection-success {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    padding: 20px 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(40, 167, 69, 0.3);
+    z-index: 10002;
+    text-align: center;
+}
+
+.success-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.success-icon {
+    font-size: 48px;
+}
+
+.success-text h4 {
+    margin: 0;
+    color: white;
+    font-size: 18px;
+}
+
+.success-text p {
+    margin: 10px 0 0 0;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+}
+
 .btn-control {
     background: rgba(255, 255, 255, 0.9);
     color: #333;

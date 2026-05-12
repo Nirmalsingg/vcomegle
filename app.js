@@ -157,10 +157,84 @@ class VComingleApp {
                 
                 // Handle match found
                 this.socket.on('match-found', (data) => {
-                    this.currentRoom = data.roomId;
-                    this.isInitiator = data.isInitiator;
-                    console.log('Match found! Room:', data.roomId, 'Initiator:', data.isInitiator);
-                    this.onMatchFound();
+                    const { roomId, strangerId, isInitiator } = data;
+                    const matchTime = new Date().toISOString();
+                    console.log(`🎯 Match found! Room: ${roomId}, Stranger: ${strangerId}, Initiator: ${isInitiator}, Time: ${matchTime}`);
+                    
+                    this.currentRoom = roomId;
+                    this.strangerId = strangerId;
+                    this.isInitiator = isInitiator;
+                    
+                    // Hide welcome screen and show chat
+                    document.getElementById('welcomeScreen').style.display = 'none';
+                    document.getElementById('chatScreen').style.display = 'flex';
+                    
+                    // Start WebRTC connection immediately
+                    this.startWebRTCConnection(roomId, strangerId, isInitiator);
+                    
+                    // Track connection speed
+                    this.connectionStartTime = Date.now();
+                    
+                    // Monitor connection establishment
+                    this.setupConnectionMonitoring();
+    }
+
+    // Setup connection monitoring
+    setupConnectionMonitoring() {
+        // Monitor connection state changes
+        this.connectionCheckInterval = setInterval(() => {
+            if (this.peerConnection) {
+                const state = this.peerConnection.connectionState;
+                const iceState = this.peerConnection.iceConnectionState;
+                const signalingState = this.peerConnection.signalingState;
+                
+                console.log(`🔗 Connection State: ${state}, ICE: ${iceState}, Signaling: ${signalingState}`);
+                
+                // Check if connection established within 5 seconds
+                if (state === 'connected' && this.connectionStartTime) {
+                    const connectionTime = Date.now() - this.connectionStartTime;
+                    console.log(`⚡ Connection established in ${connectionTime}ms`);
+                    
+                    if (connectionTime <= 5000) {
+                        console.log(`✅ 5-second connection guarantee met!`);
+                        this.showConnectionSuccess(connectionTime);
+                    } else {
+                        console.log(`⚠️ Connection took ${connectionTime}ms (target: 5000ms)`);
+                    }
+                    
+                    // Clear the interval once connected
+                    clearInterval(this.connectionCheckInterval);
+                }
+                
+                // Check for connection failures
+                if (state === 'failed' || state === 'disconnected' || state === 'closed') {
+                    console.log(`❌ Connection failed: ${state}`);
+                    clearInterval(this.connectionCheckInterval);
+                }
+            }
+        }, 1000); // Check every second
+    }
+
+    // Show connection success notification
+    showConnectionSuccess(connectionTime) {
+        const notification = document.createElement('div');
+        notification.className = 'connection-success';
+        notification.innerHTML = `
+            <div class="success-content">
+                <div class="success-icon">⚡</div>
+                <div class="success-text">
+                    <h4>Connected in ${connectionTime}ms!</h4>
+                    <p>5-second guarantee met ✅</p>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
                 });
                 
                 // Handle waiting

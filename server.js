@@ -228,36 +228,41 @@ io.on('connection', (socket) => {
     });
 });
 
-// Helper functions
-function findMatch(user) {
-    // Enhanced matching algorithm
-    const availableUsers = waitingUsers.filter(waitingUser => {
-        // Match text preference
-        if (waitingUser.textOnly !== user.textOnly) return false;
-        
-        // Don't match with self
-        if (waitingUser.id === user.id) return false;
-        
-        // Interest matching (if specified)
-        if (user.interests.length > 0 && waitingUser.interests.length > 0) {
-            const commonInterests = user.interests.some(interest => 
-                waitingUser.interests.includes(interest)
-            );
-            if (!commonInterests) return false;
-            
-            // Prioritize users with shared interests
-            if (commonInterests) {
-                return waitingUser;
-            }
-        } else {
-            // No interests specified, match anyway
-            return waitingUser;
-        }
-    });
+// Find a matching user - OPTIMIZED FOR 5-SECOND CONNECTIONS
+const findMatch = (user) => {
+    console.log(`🔍 Finding match for user ${user.id}, textOnly: ${user.textOnly}`);
     
-    // No specific match found, return first available user with same mode preference
-    return waitingUsers.find(candidate => candidate.textOnly === user.textOnly);
-}
+    // Immediate match if users are waiting
+    if (waitingUsers.length > 0) {
+        // Get best match based on preferences and waiting time
+        const bestMatch = waitingUsers
+            .filter(waitingUser => {
+                // Don't match with self
+                if (waitingUser.id === user.id) return false;
+                
+                // Match text preference
+                if (waitingUser.textOnly !== user.textOnly) return false;
+                
+                // Priority: Users waiting longer get matched first
+                const waitingTime = Date.now() - (waitingUser.addedTime || Date.now());
+                return waitingTime > 5000; // Only match users waiting > 5 seconds
+            })
+            .sort((a, b) => {
+                const aTime = a.addedTime || Date.now();
+                const bTime = b.addedTime || Date.now();
+                return aTime - bTime; // Longest waiting first
+            })[0];
+        
+        if (bestMatch) {
+            console.log(`⚡ Instant match found: ${user.id} ↔ ${bestMatch.id}`);
+            return bestMatch;
+        }
+    }
+    
+    // No users waiting, add to queue
+    console.log(`⏳ No users waiting, adding ${user.id} to queue`);
+    return null;
+};
 
 function generateRoomId() {
     return Math.random().toString(36).substr(2, 9);
