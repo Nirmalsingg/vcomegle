@@ -125,15 +125,21 @@ class VComingleApp {
                 this.socket = io(socketUrl);
                 
                 this.socket.on('connect', () => {
-                    console.log('Connected to signaling server');
+                    console.log('✅ Connected to Render signaling server:', socketUrl);
+                    console.log('Socket ID:', this.socket.id);
                     resolve();
                 });
                 
                 this.socket.on('connect_error', (error) => {
-                    console.error('Socket connection error:', error);
+                    console.error('❌ Socket connection error to Render backend:', error);
+                    console.error('Backend URL:', socketUrl);
                     // Fallback to demo mode if server unavailable
                     this.fallbackToDemoMode();
                     resolve();
+                });
+                
+                this.socket.on('disconnect', (reason) => {
+                    console.log('🔌 Disconnected from Render server:', reason);
                 });
                 
                 // Handle match found
@@ -185,13 +191,19 @@ class VComingleApp {
     }
 
     findMatch() {
+        console.log('🔍 Looking for match... Text only:', this.textOnly);
+        console.log('🌐 Socket connected:', this.socket?.connected);
+        console.log('👥 Waiting users will be checked on server');
+        
         // Request match from server
         if (this.socket && this.socket.connected) {
             this.socket.emit('find-match', {
                 textOnly: this.textOnly,
                 interests: this.interestsInput.value
             });
+            console.log('📤 Match request sent to Render server');
         } else {
+            console.log('❌ Socket not connected, falling back to demo mode');
             // Fallback to demo mode
             this.fallbackToDemoMode();
         }
