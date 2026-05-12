@@ -122,18 +122,31 @@ class VComingleApp {
             try {
                 // Use the current domain for Socket.io connection
                 const socketUrl = "https://vcomegle-backend.onrender.com";
-                this.socket = io(socketUrl);
+                this.socket = io(socketUrl, {
+                    transports: ['websocket', 'polling'],
+                    timeout: 20000,
+                    forceNew: true,
+                    reconnection: true,
+                    reconnectionAttempts: 5,
+                    reconnectionDelay: 1000
+                });
                 
                 this.socket.on('connect', () => {
                     console.log('✅ Connected to Render signaling server:', socketUrl);
-                    console.log('Socket ID:', this.socket.id);
+                    console.log('🆔 Socket ID:', this.socket.id);
+                    console.log('🌐 Transport:', this.socket.io.engine.transport.name);
+                    console.log('📡 Connected at:', new Date().toISOString());
                     resolve();
                 });
                 
                 this.socket.on('connect_error', (error) => {
                     console.error('❌ Socket connection error to Render backend:', error);
-                    console.error('Backend URL:', socketUrl);
+                    console.error('🔗 Backend URL:', socketUrl);
+                    console.error('🚨 Error details:', error.message || error);
+                    console.error('📊 Connection attempts:', this.socket.io.engine.attempts);
+                    
                     // Fallback to demo mode if server unavailable
+                    console.warn('🔄 Falling back to demo mode...');
                     this.fallbackToDemoMode();
                     resolve();
                 });

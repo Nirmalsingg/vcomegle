@@ -13,7 +13,9 @@ const io = socketIo(server, {
     cors: {
         origin: "*",
         methods: ["GET", "POST"]
-    }
+    },
+    transports: ['websocket', 'polling'],
+    allowEIO3: true
 });
 
 // Middleware
