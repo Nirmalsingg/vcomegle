@@ -497,6 +497,7 @@ class VComingleApp {
         
         this.addMessage(message, 'you');
         this.messageInput.value = '';
+    }
         
         // Send message via signaling server
         if (this.socket && this.socket.connected && this.currentRoom) {
@@ -605,19 +606,52 @@ class VComingleApp {
         }
         
         // Clear video elements
-        this.localVideo.srcObject = null;
-        this.remoteVideo.srcObject = null;
-        
-        // Close peer connection
-        if (this.peerConnection) {
-            this.peerConnection.close();
-            this.peerConnection = null;
-        }
+        if (this.localVideo) this.localVideo.srcObject = null;
+        if (this.remoteVideo) this.remoteVideo.srcObject = null;
         
         // Clear chat messages
-        this.chatMessages.innerHTML = '';
+        if (this.chatMessages) this.chatMessages.innerHTML = '';
         
         this.isConnected = false;
+    }
+
+    // Find match method for button functionality
+    findMatch(textOnly, interests) {
+        if (this.socket && this.socket.connected) {
+            console.log(`🔍 Finding match: textOnly=${textOnly}, interests=${interests}`);
+            this.socket.emit('find-match', {
+                textOnly: textOnly,
+                interests: interests
+            });
+        } else {
+            console.error('❌ Socket not connected');
+            this.showNotification('Please wait, connecting to server...', 'error');
+        }
+    }
+
+    // Show premium upgrade method
+    showPremiumUpgrade() {
+        console.log('💳 Opening premium upgrade modal');
+        // This will use the payment system
+        if (typeof paymentSystem !== 'undefined') {
+            paymentSystem.showPaymentModal('premium', 9.99);
+        } else {
+            console.error('❌ Payment system not loaded');
+            this.showNotification('Payment system loading...', 'info');
+        }
+    }
+
+    // Show notification method
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
     }
 
     goHome() {
