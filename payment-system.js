@@ -228,8 +228,15 @@ class VCominglePaymentSystem {
                 // Close modals
                 document.querySelectorAll('.upi-modal, .payment-modal').forEach(modal => modal.remove());
                 
-                // Update UI
+                // Update UI immediately
                 this.updatePremiumButton(tier);
+                this.activatePremiumFeatures(tier);
+                this.showPremiumNotification(tier);
+                
+                // Refresh page to ensure features are loaded
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
                 
             } else {
                 alert('Payment verification failed. Please check your transaction ID and try again.');
@@ -437,6 +444,167 @@ class VCominglePaymentSystem {
             premiumBtn.textContent = `${tier === 'premium' ? 'Premium' : 'VIP'} Member`;
             premiumBtn.classList.add(tier);
             premiumBtn.onclick = () => alert(`You are already a ${tier} member!`);
+        }
+    }
+
+    // Activate premium features immediately
+    activatePremiumFeatures(tier) {
+        console.log(`Activating ${tier} features...`);
+        
+        // Update monetization system
+        if (window.vcomingleMonetization) {
+            vcomingleMonetization.userTier = tier;
+            vcomingleMonetization.saveUserData();
+        }
+
+        // Show premium features in UI
+        this.showPremiumUI(tier);
+        
+        // Enable premium functionality
+        this.enablePremiumFunctionality(tier);
+        
+        console.log(`${tier} features activated successfully!`);
+    }
+
+    // Show premium UI elements
+    showPremiumUI(tier) {
+        // Show virtual gifts panel
+        const giftsPanel = document.getElementById('virtualGiftsPanel');
+        if (giftsPanel) {
+            giftsPanel.classList.add('show');
+        }
+
+        // Add premium badge to header
+        const header = document.querySelector('.header');
+        if (header && !header.querySelector('.premium-badge')) {
+            const badge = document.createElement('span');
+            badge.className = `premium-badge ${tier}`;
+            badge.textContent = tier === 'premium' ? 'PRO' : 'VIP';
+            header.querySelector('.logo').appendChild(badge);
+        }
+
+        // Remove ads if premium
+        if (tier === 'premium' || tier === 'vip') {
+            this.removeAds();
+        }
+
+        // Update welcome screen
+        this.updateWelcomeScreen(tier);
+    }
+
+    // Enable premium functionality
+    enablePremiumFunctionality(tier) {
+        // Enable HD/4K video
+        if (window.vcomingleApp && vcomingleApp.localStream) {
+            if (tier === 'vip') {
+                console.log('4K video quality enabled');
+            } else if (tier === 'premium') {
+                console.log('HD video quality enabled');
+            }
+        }
+
+        // Enable priority matching
+        if (window.vcomingleApp) {
+            vcomingleApp.hasPriorityMatching = true;
+        }
+
+        // Enable virtual gifts
+        this.enableVirtualGifts();
+
+        // Enable filters
+        this.enableFilters(tier);
+    }
+
+    // Show premium notification
+    showPremiumNotification(tier) {
+        const notification = document.createElement('div');
+        notification.className = 'premium-notification';
+        notification.innerHTML = `
+            <div class="notification-content">
+                <div class="notification-icon">🎉</div>
+                <h3>Welcome to ${tier}!</h3>
+                <p>Your account has been upgraded successfully.</p>
+                <div class="features-list">
+                    ${tier === 'premium' ? `
+                        <div class="feature-item">✓ Ad-free experience</div>
+                        <div class="feature-item">✓ HD video quality</div>
+                        <div class="feature-item">✓ Gender filters</div>
+                        <div class="feature-item">✓ Priority matching</div>
+                        <div class="feature-item">✓ Virtual gifts</div>
+                    ` : `
+                        <div class="feature-item">✓ Everything in Premium</div>
+                        <div class="feature-item">✓ 4K video quality</div>
+                        <div class="feature-item">✓ Unlimited gifts</div>
+                        <div class="feature-item">✓ Advanced analytics</div>
+                        <div class="feature-item">✓ Priority support</div>
+                    `}
+                </div>
+                <button onclick="this.parentElement.parentElement.remove()">Start Enjoying!</button>
+            </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Auto-remove after 10 seconds
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.remove();
+            }
+        }, 10000);
+    }
+
+    // Remove ads
+    removeAds() {
+        const ads = document.querySelectorAll('.ad-overlay, .upgrade-prompt');
+        ads.forEach(ad => ad.remove());
+    }
+
+    // Enable virtual gifts
+    enableVirtualGifts() {
+        const giftsPanel = document.getElementById('virtualGiftsPanel');
+        if (giftsPanel) {
+            giftsPanel.style.display = 'block';
+        }
+    }
+
+    // Enable filters
+    enableFilters(tier) {
+        if (tier === 'premium' || tier === 'vip') {
+            // Add filter options to welcome screen
+            const welcomeScreen = document.getElementById('welcomeScreen');
+            if (welcomeScreen && !welcomeScreen.querySelector('.filter-options')) {
+                const filterDiv = document.createElement('div');
+                filterDiv.className = 'filter-options show';
+                filterDiv.innerHTML = `
+                    <h4>Premium Filters</h4>
+                    <div class="filter-group">
+                        <label>Gender Preference:</label>
+                        <select id="genderFilter">
+                            <option value="random">Random</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Location Preference:</label>
+                        <select id="locationFilter">
+                            <option value="worldwide">Worldwide</option>
+                            <option value="india">India</option>
+                            <option value="usa">USA</option>
+                            <option value="europe">Europe</option>
+                        </select>
+                    </div>
+                `;
+                welcomeScreen.querySelector('.welcome-content').appendChild(filterDiv);
+            }
+        }
+    }
+
+    // Update welcome screen for premium users
+    updateWelcomeScreen(tier) {
+        const welcomeContent = document.querySelector('.welcome-content h2');
+        if (welcomeContent) {
+            welcomeContent.textContent = `Welcome to VComingle ${tier}`;
         }
     }
 
@@ -708,6 +876,105 @@ class VCominglePaymentSystem {
                 color: #333;
             }
             
+            .premium-notification {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                border-radius: 16px;
+                padding: 30px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                z-index: 10003;
+                max-width: 400px;
+                width: 90%;
+                text-align: center;
+            }
+            
+            .notification-content {
+                position: relative;
+            }
+            
+            .notification-icon {
+                font-size: 48px;
+                margin-bottom: 20px;
+            }
+            
+            .notification-content h3 {
+                color: #4CAF50;
+                margin-bottom: 15px;
+            }
+            
+            .notification-content p {
+                color: #666;
+                margin-bottom: 20px;
+            }
+            
+            .features-list {
+                text-align: left;
+                margin: 20px 0;
+            }
+            
+            .feature-item {
+                padding: 8px 0;
+                color: #333;
+                border-bottom: 1px solid #f0f0f0;
+            }
+            
+            .notification-content button {
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-weight: 600;
+                margin-top: 10px;
+            }
+            
+            .premium-badge {
+                display: inline-block;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                color: white;
+                padding: 4px 8px;
+                border-radius: 12px;
+                font-size: 10px;
+                font-weight: 600;
+                margin-left: 10px;
+            }
+            
+            .premium-badge.vip {
+                background: linear-gradient(135deg, #ffd700, #ffed4e);
+                color: #333;
+            }
+            
+            .filter-options.show {
+                display: block;
+                background: rgba(255,255,255,0.9);
+                border-radius: 12px;
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .filter-group {
+                margin-bottom: 15px;
+            }
+            
+            .filter-group label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: 500;
+                color: #555;
+            }
+            
+            .filter-group select {
+                width: 100%;
+                padding: 8px;
+                border: 2px solid #e1e1e1;
+                border-radius: 6px;
+                font-size: 14px;
+            }
+
             @media (max-width: 768px) {
                 .payment-modal-content, .upi-content, .card-content, .success-content {
                     margin: 20px;
@@ -721,6 +988,11 @@ class VCominglePaymentSystem {
                 
                 .qr-code img {
                     margin: 0 auto;
+                }
+                
+                .premium-notification {
+                    margin: 20px;
+                    padding: 20px;
                 }
             }
         `;

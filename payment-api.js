@@ -89,8 +89,8 @@ class PaymentAPI {
             let paymentVerified = false;
             
             if (method === 'UPI') {
-                // Simulate UPI verification (90% success rate)
-                paymentVerified = Math.random() > 0.1;
+                // Simulate UPI verification (95% success rate for demo)
+                paymentVerified = Math.random() > 0.05;
             } else if (method === 'CARD') {
                 // Simulate card verification (95% success rate)
                 paymentVerified = Math.random() > 0.05;
