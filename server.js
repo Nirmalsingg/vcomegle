@@ -5,6 +5,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const path = require('path');
+const PaymentAPI = require('./payment-api');
 
 const app = express();
 const server = http.createServer(app);
@@ -303,7 +304,14 @@ app.get('/health', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
+// Initialize payment API
+const paymentAPI = new PaymentAPI();
+
 server.listen(PORT, () => {
     console.log(`VComingle server running on port ${PORT}`);
     console.log(`Open http://localhost:${PORT} in your browser`);
+    
+    // Start payment API on separate port
+    paymentAPI.start(3001);
+    console.log(`Payment API server running on port 3001`);
 });
