@@ -7,6 +7,7 @@ class VComingleApp {
         this.currentRoom = null;
         this.isConnected = false;
         this.textOnly = false;
+        this.isInitiator = false;
         
         this.initializeElements();
         this.initializeEventListeners();
@@ -138,6 +139,8 @@ class VComingleApp {
                 // Handle match found
                 this.socket.on('match-found', (data) => {
                     this.currentRoom = data.roomId;
+                    this.isInitiator = data.isInitiator;
+                    console.log('Match found! Room:', data.roomId, 'Initiator:', data.isInitiator);
                     this.onMatchFound();
                 });
                 
@@ -209,21 +212,42 @@ class VComingleApp {
     }
 
     handleOffer(offer) {
+        console.log('Received offer:', offer);
         if (this.peerConnection) {
-            this.peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
-            this.createAndSendAnswer();
+            this.peerConnection.setRemoteDescription(new RTCSessionDescription(offer))
+                .then(() => {
+                    console.log('Remote description set for offer');
+                    this.createAndSendAnswer();
+                })
+                .catch(error => {
+                    console.error('Error setting remote description for offer:', error);
+                });
         }
     }
 
     handleAnswer(answer) {
+        console.log('Received answer:', answer);
         if (this.peerConnection) {
-            this.peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
+            this.peerConnection.setRemoteDescription(new RTCSessionDescription(answer))
+                .then(() => {
+                    console.log('Remote description set for answer');
+                })
+                .catch(error => {
+                    console.error('Error setting remote description for answer:', error);
+                });
         }
     }
 
     handleIceCandidate(candidate) {
+        console.log('Received ICE candidate:', candidate);
         if (this.peerConnection) {
-            this.peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+            this.peerConnection.addIceCandidate(new RTCIceCandidate(candidate))
+                .then(() => {
+                    console.log('ICE candidate added successfully');
+                })
+                .catch(error => {
+                    console.error('Error adding ICE candidate:', error);
+                });
         }
     }
 
@@ -273,13 +297,17 @@ class VComingleApp {
         
         // Handle remote stream
         this.peerConnection.ontrack = (event) => {
-            this.remoteStream = event.streams[0];
-            this.remoteVideo.srcObject = this.remoteStream;
+            console.log('Received remote track:', event.track);
+            if (event.streams && event.streams[0]) {
+                this.remoteStream = event.streams[0];
+                this.remoteVideo.srcObject = this.remoteStream;
+            }
         };
         
         // Handle ICE candidates
         this.peerConnection.onicecandidate = (event) => {
             if (event.candidate) {
+                console.log('Generated ICE candidate:', event.candidate);
                 // Send candidate to peer via signaling server
                 if (this.socket && this.socket.connected && this.currentRoom) {
                     this.socket.emit('ice-candidate', { 
@@ -292,15 +320,28 @@ class VComingleApp {
             }
         };
         
-        // Create and send offer if we're the initiator
-        if (this.socket && this.socket.connected && this.currentRoom) {
+        // Handle connection state changes
+        this.peerConnection.onconnectionstatechange = () => {
+            console.log('Connection state:', this.peerConnection.connectionState);
+            if (this.peerConnection.connectionState === 'connected') {
+                this.addSystemMessage('Video connection established!');
+            } else if (this.peerConnection.connectionState === 'failed') {
+                this.addSystemMessage('Connection failed. Trying to reconnect...');
+            }
+        };
+        
+        // Create and send offer only if we're the initiator
+        if (this.socket && this.socket.connected && this.currentRoom && this.isInitiator) {
             try {
                 const offer = await this.peerConnection.createOffer();
                 await this.peerConnection.setLocalDescription(offer);
+                console.log('Created and sent offer:', offer);
                 this.socket.emit('offer', { roomId: this.currentRoom, offer });
             } catch (error) {
                 console.error('Error creating offer:', error);
             }
+        } else {
+            console.log('Not initiator, waiting for offer...');
         }
     }
 

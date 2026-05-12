@@ -64,11 +64,13 @@ io.on('connection', (socket) => {
                 waitingUsers.splice(waitingIndex, 1);
             }
             
-            // Notify both users
-            socket.emit('match-found', { roomId, strangerId: match.id });
-            match.socket.emit('match-found', { roomId, strangerId: user.id });
+            // Notify both users with their roles
+            // First user (user) becomes the initiator
+            socket.emit('match-found', { roomId, strangerId: match.id, isInitiator: true });
+            // Second user (match) becomes the receiver
+            match.socket.emit('match-found', { roomId, strangerId: user.id, isInitiator: false });
             
-            console.log(`Matched users ${user.id} and ${match.id} in room ${roomId}`);
+            console.log(`Matched users ${user.id} (initiator) and ${match.id} (receiver) in room ${roomId}`);
         } else {
             // Add to waiting list
             waitingUsers.push(user);
@@ -85,8 +87,13 @@ io.on('connection', (socket) => {
         if (room) {
             const otherUser = room.users.find(u => u.id !== socket.id);
             if (otherUser) {
+                console.log(`Forwarding offer from ${socket.id} to ${otherUser.id}`);
                 otherUser.socket.emit('offer', { offer, from: socket.id });
+            } else {
+                console.log('No other user found in room for offer');
             }
+        } else {
+            console.log('Room not found for offer:', roomId);
         }
     });
 
@@ -97,8 +104,13 @@ io.on('connection', (socket) => {
         if (room) {
             const otherUser = room.users.find(u => u.id !== socket.id);
             if (otherUser) {
+                console.log(`Forwarding answer from ${socket.id} to ${otherUser.id}`);
                 otherUser.socket.emit('answer', { answer, from: socket.id });
+            } else {
+                console.log('No other user found in room for answer');
             }
+        } else {
+            console.log('Room not found for answer:', roomId);
         }
     });
 
@@ -109,8 +121,13 @@ io.on('connection', (socket) => {
         if (room) {
             const otherUser = room.users.find(u => u.id !== socket.id);
             if (otherUser) {
+                console.log(`Forwarding ICE candidate from ${socket.id} to ${otherUser.id}`);
                 otherUser.socket.emit('ice-candidate', { candidate, from: socket.id });
+            } else {
+                console.log('No other user found in room for ICE candidate');
             }
+        } else {
+            console.log('Room not found for ICE candidate:', roomId);
         }
     });
 
