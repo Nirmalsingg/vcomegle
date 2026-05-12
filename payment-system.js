@@ -2,12 +2,12 @@ class VCominglePaymentSystem {
     constructor() {
         this.apiKey = 'test_api_key'; // Replace with your actual payment gateway API key
         this.merchantId = 'vcomingle_merchant';
-        this.upiId = 'yourupi@paytm'; // Replace with your actual UPI ID
+        this.upiId = '7042427579@ptsbi'; // Replace with your actual UPI ID
         this.bankAccount = {
-            accountNumber: 'XXXX-XXXX-XXXX-1234', // Masked for security
-            ifsc: 'HDFC0001234',
+            accountNumber: '37921905794', // Masked for security
+            ifsc: 'SBIN0006816',
             accountHolder: 'VComingle Payments',
-            bankName: 'HDFC Bank'
+            bankName: 'SBI'
         };
     }
 
