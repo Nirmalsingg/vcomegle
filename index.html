@@ -270,7 +270,7 @@
             try {
                 vcomegleApp = new VComingleApp();
                 console.log('✅ VComingle app initialized successfully');
-                
+
                 // Test button functionality
                 setTimeout(() => {
                     console.log('🧪 Testing button functionality...');
@@ -280,6 +280,51 @@
                     console.log('💳 showPremiumUpgrade function:', typeof showPremiumUpgrade);
                     console.log('💳 paymentSystem object:', typeof paymentSystem);
                     console.log('💰 revenueDashboard object:', typeof revenueDashboard);
+                    
+                    // Test button elements exist
+                    const premiumBtn = document.getElementById('premiumBtn');
+                    const revenueBtn = document.getElementById('revenueBtn');
+                    const withdrawBtn = document.getElementById('withdrawBtn');
+                    const startChatBtn = document.getElementById('startChat');
+                    
+                    console.log('🔍 Button elements:');
+                    console.log('premiumBtn:', premiumBtn);
+                    console.log('revenueBtn:', revenueBtn);
+                    console.log('withdrawBtn:', withdrawBtn);
+                    console.log('startChatBtn:', startChatBtn);
+                    
+                    // Add event listeners if buttons exist
+                    if (premiumBtn) {
+                        premiumBtn.addEventListener('click', function(e) {
+                            console.log('💳 Premium button clicked via event listener');
+                            e.preventDefault();
+                            showPremiumUpgrade();
+                        });
+                    }
+                    
+                    if (revenueBtn) {
+                        revenueBtn.addEventListener('click', function(e) {
+                            console.log('💰 Revenue button clicked via event listener');
+                            e.preventDefault();
+                            openRevenueDashboard();
+                        });
+                    }
+                    
+                    if (withdrawBtn) {
+                        withdrawBtn.addEventListener('click', function(e) {
+                            console.log('💸 Withdraw button clicked via event listener');
+                            e.preventDefault();
+                            withdrawFunds();
+                        });
+                    }
+                    
+                    if (startChatBtn) {
+                        startChatBtn.addEventListener('click', function(e) {
+                            console.log('🎯 Start chat button clicked via event listener');
+                            e.preventDefault();
+                            startChat();
+                        });
+                    }
                 }, 2000);
             } catch (error) {
                 console.error('❌ App initialization failed:', error);
