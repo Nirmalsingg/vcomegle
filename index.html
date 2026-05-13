@@ -189,16 +189,18 @@
         
         function startChat() {
             console.log('🎯 Start chat button clicked');
+            alert('Start Chat button clicked! Connecting to server...');
+            
             try {
                 if (!vcomegleApp) {
                     console.log('📱 Creating new VComingleApp instance');
                     vcomegleApp = new VComingleApp();
                 }
-                
+
                 // Show connecting screen
                 document.getElementById('welcomeScreen').style.display = 'none';
                 document.getElementById('connectingScreen').style.display = 'flex';
-                
+
                 vcomegleApp.connectToSignalingServer().then(() => {
                     console.log('✅ Connected to server, finding match...');
                     const textOnly = document.getElementById('textOnly').checked;
@@ -217,6 +219,8 @@
         
         function showPremiumUpgrade() {
             console.log('💳 Premium upgrade button clicked');
+            alert('Premium button clicked! Opening payment modal...');
+            
             try {
                 if (!vcomegleApp) {
                     vcomegleApp = new VComingleApp();
@@ -236,6 +240,8 @@
         
         function openRevenueDashboard() {
             console.log('💰 Revenue button clicked');
+            alert('Revenue button clicked! Opening dashboard...');
+            
             try {
                 if (typeof revenueDashboard !== 'undefined') {
                     revenueDashboard.initializeDashboard();
@@ -248,9 +254,11 @@
                 alert('Failed to open revenue dashboard. Please refresh the page.');
             }
         }
-        
+
         function withdrawFunds() {
             console.log('💸 Withdraw button clicked');
+            alert('Withdraw button clicked! Opening withdrawal form...');
+            
             try {
                 if (typeof revenueDashboard !== 'undefined') {
                     revenueDashboard.withdrawFunds();
